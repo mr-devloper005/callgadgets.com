@@ -19,7 +19,7 @@ const taskIcons: Record<TaskKey, any> = {
 }
 
 const footerLinks = {
-  platform: SITE_CONFIG.tasks.filter((task) => task.enabled).map((task) => ({
+  platform: SITE_CONFIG.tasks.filter((task) => task.enabled && (task.key === 'classified' || task.key === 'image')).map((task) => ({
     name: task.label,
     href: task.route,
     icon: taskIcons[task.key] || LayoutGrid,
@@ -33,9 +33,9 @@ const footerLinks = {
   ],
   resources: [
     { name: 'Help Center', href: '/help' },
-    { name: 'Community', href: '/community' },
-    { name: 'Developers', href: '/developers' },
-    { name: 'Status', href: '/status' },
+    { name: 'Safety Tips', href: '/help' },
+    { name: 'Trust & Verification', href: '/status' },
+    { name: 'Contact Support', href: '/contact' },
   ],
   legal: [
     { name: 'Privacy', href: '/privacy' },
@@ -57,7 +57,7 @@ export function Footer() {
   }
 
   const { recipe } = getFactoryState()
-  const enabledTasks = SITE_CONFIG.tasks.filter((task) => task.enabled)
+  const enabledTasks = SITE_CONFIG.tasks.filter((task) => task.enabled && (task.key === 'classified' || task.key === 'image'))
   const primaryTask = enabledTasks.find((task) => task.key === recipe.primaryTask) || enabledTasks[0]
 
   if (recipe.footer === 'minimal-footer') {
@@ -174,33 +174,33 @@ export function Footer() {
   }
 
   return (
-    <footer className="border-t border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] text-slate-950">
+    <footer className="border-t border-[#1e4b3a] bg-[linear-gradient(180deg,#07110f_0%,#050c0a_100%)] text-[#d5fff0]">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_0.8fr]">
           <div>
             <Link href="/" className="flex items-center gap-3">
-              <div className="h-11 w-11 overflow-hidden rounded-2xl border border-slate-200 bg-white p-1 shadow-sm">
+              <div className="h-11 w-11 overflow-hidden rounded-2xl border border-[#1e6c4e] bg-[#0b1f19] p-1 shadow-sm">
                 <img src="/favicon.png?v=20260401" alt={`${SITE_CONFIG.name} logo`} width="44" height="44" className="h-full w-full object-contain" />
               </div>
               <div>
                 <span className="block text-lg font-semibold">{SITE_CONFIG.name}</span>
-                <span className="text-xs uppercase tracking-[0.22em] text-slate-500">{siteContent.footer.tagline}</span>
+                <span className="text-xs uppercase tracking-[0.22em] text-[#7affc8]">Classifieds + Image Sharing</span>
               </div>
             </Link>
-            <p className="mt-5 max-w-sm text-sm leading-7 text-slate-600">{SITE_CONFIG.description}</p>
+            <p className="mt-5 max-w-sm text-sm leading-7 text-[#90dcbc]">{SITE_CONFIG.description}</p>
           </div>
           {(['platform', 'company', 'resources', 'legal'] as const).map((section) => (
             <div key={section}>
-              <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">{section}</h3>
-              <ul className="mt-5 space-y-3 text-sm text-slate-600">
+              <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-[#7affc8]">{section}</h3>
+              <ul className="mt-5 space-y-3 text-sm text-[#90dcbc]">
                 {footerLinks[section].map((item: any) => (
-                  <li key={item.name}><Link href={item.href} className="flex items-center gap-2 hover:text-slate-950">{item.icon ? <item.icon className="h-4 w-4" /> : null}{item.name}</Link></li>
+                  <li key={item.name}><Link href={item.href} className="flex items-center gap-2 hover:text-[#d5fff0]">{item.icon ? <item.icon className="h-4 w-4" /> : null}{item.name}</Link></li>
                 ))}
               </ul>
             </div>
           ))}
         </div>
-        <div className="mt-12 border-t border-slate-200 pt-6 text-center text-sm text-slate-500">&copy; {new Date().getFullYear()} {SITE_CONFIG.name}. All rights reserved.</div>
+        <div className="mt-12 border-t border-[#1e4b3a] pt-6 text-center text-sm text-[#90dcbc]">&copy; {new Date().getFullYear()} {SITE_CONFIG.name}. All rights reserved.</div>
       </div>
     </footer>
   )

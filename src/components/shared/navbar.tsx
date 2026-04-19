@@ -97,7 +97,7 @@ export function Navbar() {
   const { isAuthenticated } = useAuth()
   const { recipe } = getFactoryState()
 
-  const navigation = useMemo(() => SITE_CONFIG.tasks.filter((task) => task.enabled && task.key !== 'profile'), [])
+  const navigation = useMemo(() => SITE_CONFIG.tasks.filter((task) => task.enabled && (task.key === 'classified' || task.key === 'image')), [])
   const primaryNavigation = navigation.slice(0, 5)
   const mobileNavigation = navigation.map((task) => ({
     name: task.label,
@@ -111,7 +111,7 @@ export function Navbar() {
     const palette = directoryPalette[(recipe.brandPack === 'market-utility' ? 'market-utility' : 'directory-clean') as keyof typeof directoryPalette]
 
     return (
-      <header className={cn('sticky top-0 z-50 w-full', palette.shell)}>
+      <header className={cn('sticky top-0 z-50 w-full border-b border-[#1c4c3b] bg-[rgba(6,14,12,0.9)] text-[#d5fff0] backdrop-blur-xl')}>
         <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           <div className="flex min-w-0 items-center gap-4">
             <Link href="/" className="flex shrink-0 items-center gap-3">
@@ -128,7 +128,7 @@ export function Navbar() {
               {primaryNavigation.slice(0, 4).map((task) => {
                 const isActive = pathname.startsWith(task.route)
                 return (
-                  <Link key={task.key} href={task.route} className={cn('text-sm font-semibold transition-colors', isActive ? 'text-foreground' : palette.nav)}>
+                  <Link key={task.key} href={task.route} className={cn('rounded-full px-4 py-2 text-sm font-semibold transition-colors', isActive ? 'bg-[#22e39b] text-[#052d20]' : 'text-[#8ceec7] hover:bg-[#123226] hover:text-[#d5fff0]')}>
                     {task.label}
                   </Link>
                 )
@@ -137,24 +137,24 @@ export function Navbar() {
           </div>
 
           <div className="hidden min-w-0 flex-1 items-center justify-center lg:flex">
-            <div className={cn('flex w-full max-w-xl items-center gap-3 rounded-full px-4 py-3', palette.search)}>
+            <form action="/search" className={cn('flex w-full max-w-xl items-center gap-3 rounded-full border border-[#1f5f48] bg-[#0b1f19] px-4 py-2.5 text-[#8ceec7]', palette.search)}>
               <Search className="h-4 w-4" />
-              <span className="text-sm">Find businesses, spaces, and local services</span>
-              <div className="ml-auto hidden items-center gap-1 text-xs opacity-75 md:flex">
+              <input
+                name="q"
+                placeholder="Search classifieds and image posts"
+                className="h-9 w-full bg-transparent text-sm text-[#d5fff0] placeholder:text-[#7ac9aa] focus:outline-none"
+              />
+              <button type="submit" className="inline-flex items-center rounded-full bg-[#22e39b] px-3 py-1.5 text-xs font-semibold text-[#052d20] hover:bg-[#16cc88]">
+                Search
+              </button>
+              <div className="ml-1 hidden items-center gap-1 text-xs opacity-75 md:flex">
                 <MapPin className="h-3.5 w-3.5" />
-                Local discovery
+                Local marketplace
               </div>
-            </div>
+            </form>
           </div>
 
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-            {primaryTask ? (
-              <Link href={primaryTask.route} className="hidden items-center gap-2 rounded-full border border-current/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] opacity-75 md:inline-flex">
-                <Sparkles className="h-3.5 w-3.5" />
-                {primaryTask.label}
-              </Link>
-            ) : null}
-
             {isAuthenticated ? (
               <NavbarAuthControls />
             ) : (
@@ -162,10 +162,10 @@ export function Navbar() {
                 <Button variant="ghost" size="sm" asChild className="rounded-full px-4">
                   <Link href="/login">Sign In</Link>
                 </Button>
-                <Button size="sm" asChild className={cn('rounded-full', palette.cta)}>
+                <Button size="sm" asChild className={cn('rounded-full bg-[#22e39b] text-[#052d20] hover:bg-[#16cc88]', palette.cta)}>
                   <Link href="/register">
                     <Plus className="mr-1 h-4 w-4" />
-                    Add Listing
+                    Post Ad
                   </Link>
                 </Button>
               </div>
@@ -180,10 +180,17 @@ export function Navbar() {
         {isMobileMenuOpen && (
           <div className={palette.mobile}>
             <div className="space-y-2 px-4 py-4">
-              <div className={cn('mb-3 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium', palette.search)}>
+              <form action="/search" className={cn('mb-3 flex items-center gap-3 rounded-2xl border border-[#1f5f48] bg-[#0b1f19] px-4 py-3 text-sm font-medium text-[#8ceec7]', palette.search)}>
                 <Search className="h-4 w-4" />
-                Find businesses, spaces, and services
-              </div>
+                <input
+                  name="q"
+                  placeholder="Search deals and image posts"
+                  className="h-8 w-full bg-transparent text-sm text-[#d5fff0] placeholder:text-[#7ac9aa] focus:outline-none"
+                />
+                <button type="submit" className="rounded-lg bg-[#22e39b] px-3 py-1 text-xs font-semibold text-[#052d20] hover:bg-[#16cc88]">
+                  Go
+                </button>
+              </form>
               {mobileNavigation.map((item) => {
                 const isActive = pathname.startsWith(item.href)
                 return (

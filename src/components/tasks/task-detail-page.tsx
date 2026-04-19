@@ -229,7 +229,7 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
 
   if (productKind === "directory" && (task === "listing" || task === "classified" || task === "profile")) {
     return (
-      <div className="min-h-screen bg-[#f8fbff]">
+      <div className="min-h-screen bg-[linear-gradient(180deg,#081310_0%,#060d0b_100%)]">
         <NavbarShell />
         <DirectoryTaskDetailPage
           task={task}
@@ -336,8 +336,8 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
             ) : null}
 
             {isClassified ? (
-              <div className="mx-auto w-full max-w-4xl rounded-2xl border border-border bg-card p-6">
-                <h2 className="text-lg font-semibold text-foreground">Business details</h2>
+              <div className="mx-auto w-full max-w-4xl rounded-2xl border border-[#1e4b3a] bg-[rgba(8,20,16,0.9)] p-6 shadow-[0_16px_40px_rgba(46,255,176,0.14)]">
+                <h2 className="text-lg font-semibold text-foreground">Seller details</h2>
                 <div className="mt-4 space-y-3 text-sm text-muted-foreground">
                   {content.website && (
                     <div className="flex items-start gap-2">
@@ -391,7 +391,7 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
             ) : null}
 
             {isClassified && mapEmbedUrl ? (
-              <div className="mx-auto w-full max-w-4xl rounded-2xl border border-border bg-card p-4">
+              <div className="mx-auto w-full max-w-4xl rounded-2xl border border-[#1e4b3a] bg-[rgba(8,20,16,0.9)] p-4 shadow-[0_16px_40px_rgba(46,255,176,0.14)]">
                 <p className="text-sm font-semibold text-foreground">Location map</p>
                 <div className="mt-4 overflow-hidden rounded-xl border border-border">
                   <iframe

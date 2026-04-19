@@ -75,27 +75,27 @@ function getPostMeta(post?: SitePost | null) {
 function getDirectoryTone(brandPack: string) {
   if (brandPack === 'market-utility') {
     return {
-      shell: 'bg-[#f5f7f1] text-[#1f2617]',
-      hero: 'bg-[linear-gradient(180deg,#eef4e4_0%,#f8faf4_100%)]',
-      panel: 'border border-[#d5ddc8] bg-white shadow-[0_24px_64px_rgba(64,76,34,0.08)]',
-      soft: 'border border-[#d5ddc8] bg-[#eff3e7]',
-      muted: 'text-[#5b664c]',
-      title: 'text-[#1f2617]',
-      badge: 'bg-[#1f2617] text-[#edf5dc]',
-      action: 'bg-[#1f2617] text-[#edf5dc] hover:bg-[#2f3a24]',
-      actionAlt: 'border border-[#d5ddc8] bg-white text-[#1f2617] hover:bg-[#eef3e7]',
+      shell: 'bg-[linear-gradient(180deg,#081310_0%,#060d0b_100%)] text-[#d5fff0]',
+      hero: 'bg-[linear-gradient(180deg,#0b1f19_0%,#07110f_100%)]',
+      panel: 'border border-[#1e4b3a] bg-[rgba(8,20,16,0.9)] shadow-[0_24px_64px_rgba(46,255,176,0.14)]',
+      soft: 'border border-[#1e4b3a] bg-[#0d231d]',
+      muted: 'text-[#90dcbc]',
+      title: 'text-[#d5fff0]',
+      badge: 'bg-[#22e39b] text-[#052d20]',
+      action: 'bg-[#22e39b] text-[#052d20] hover:bg-[#16cc88]',
+      actionAlt: 'border border-[#1e6c4e] bg-[#0b1f19] text-[#7affc8] hover:bg-[#123226]',
     }
   }
   return {
-    shell: 'bg-[#f8fbff] text-slate-950',
-    hero: 'bg-[linear-gradient(180deg,#eef6ff_0%,#ffffff_100%)]',
-    panel: 'border border-slate-200 bg-white shadow-[0_24px_64px_rgba(15,23,42,0.08)]',
-    soft: 'border border-slate-200 bg-slate-50',
-    muted: 'text-slate-600',
-    title: 'text-slate-950',
-    badge: 'bg-slate-950 text-white',
-    action: 'bg-slate-950 text-white hover:bg-slate-800',
-    actionAlt: 'border border-slate-200 bg-white text-slate-950 hover:bg-slate-100',
+    shell: 'bg-[linear-gradient(180deg,#081310_0%,#060d0b_100%)] text-[#d5fff0]',
+    hero: 'bg-[linear-gradient(180deg,#0b1f19_0%,#07110f_100%)]',
+    panel: 'border border-[#1e4b3a] bg-[rgba(8,20,16,0.9)] shadow-[0_24px_64px_rgba(46,255,176,0.14)]',
+    soft: 'border border-[#1e4b3a] bg-[#0d231d]',
+    muted: 'text-[#90dcbc]',
+    title: 'text-[#d5fff0]',
+    badge: 'bg-[#22e39b] text-[#052d20]',
+    action: 'bg-[#22e39b] text-[#052d20] hover:bg-[#16cc88]',
+    actionAlt: 'border border-[#1e6c4e] bg-[#0b1f19] text-[#7affc8] hover:bg-[#123226]',
   }
 }
 
@@ -159,27 +159,35 @@ function DirectoryHome({ primaryTask, enabledTasks, listingPosts, classifiedPost
             <div>
               <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] ${tone.badge}`}>
                 <Compass className="h-3.5 w-3.5" />
-                Local discovery product
+                Classifieds + image sharing
               </span>
               <h1 className={`mt-6 max-w-4xl text-5xl font-semibold tracking-[-0.06em] sm:text-6xl ${tone.title}`}>
-                Search businesses, compare options, and act fast without digging through generic feeds.
+                Discover local deals and visual posts in one fast, trust-focused marketplace.
               </h1>
               <p className={`mt-6 max-w-2xl text-base leading-8 ${tone.muted}`}>{SITE_CONFIG.description}</p>
 
-              <div className={`mt-8 grid gap-3 rounded-[2rem] p-4 ${tone.panel} md:grid-cols-[1.25fr_0.8fr_auto]`}>
-                <div className="rounded-full bg-black/5 px-4 py-3 text-sm">What do you need today?</div>
-                <div className="rounded-full bg-black/5 px-4 py-3 text-sm">Choose area or city</div>
-                <Link href={primaryTask?.route || '/listings'} className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ${tone.action}`}>
-                  Browse now
+              <form action="/search" className={`mt-8 grid gap-3 rounded-[2rem] p-4 ${tone.panel} md:grid-cols-[1.25fr_0.8fr_auto]`}>
+                <input
+                  name="q"
+                  placeholder="What are you looking for today?"
+                  className="rounded-full bg-black/5 px-4 py-3 text-sm text-current placeholder:opacity-70 focus:outline-none focus:ring-2 focus:ring-[#22e39b]/40"
+                />
+                <input
+                  name="category"
+                  placeholder="Choose city or neighborhood"
+                  className="rounded-full bg-black/5 px-4 py-3 text-sm text-current placeholder:opacity-70 focus:outline-none focus:ring-2 focus:ring-[#22e39b]/40"
+                />
+                <button type="submit" className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ${tone.action}`}>
+                  Search now
                   <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
+                </button>
+              </form>
 
               <div className="mt-8 grid gap-3 sm:grid-cols-3">
                 {[
-                  ['Verified businesses', `${featuredListings.length || 3}+ highlighted surfaces`],
-                  ['Fast scan rhythm', 'More utility, less filler'],
-                  ['Action first', 'Call, visit, shortlist, compare'],
+                  ['Fresh local posts', `${featuredListings.length || 3}+ active highlights`],
+                  ['Deals + visuals', 'Classified listings and image-led posts'],
+                  ['Action ready', 'Call, chat, shortlist, and respond'],
                 ].map(([label, value]) => (
                   <div key={label} className={`rounded-[1.4rem] p-4 ${tone.soft}`}>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] opacity-70">{label}</p>
@@ -194,11 +202,11 @@ function DirectoryHome({ primaryTask, enabledTasks, listingPosts, classifiedPost
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] opacity-70">Primary lane</p>
-                    <h2 className="mt-2 text-3xl font-semibold">{primaryTask?.label || 'Listings'}</h2>
+                    <h2 className="mt-2 text-3xl font-semibold">{primaryTask?.label || 'Classifieds'}</h2>
                   </div>
                   <ShieldCheck className="h-6 w-6" />
                 </div>
-                <p className={`mt-4 text-sm leading-7 ${tone.muted}`}>{primaryTask?.description || 'Structured discovery for services, offers, and business surfaces.'}</p>
+                <p className={`mt-4 text-sm leading-7 ${tone.muted}`}>{primaryTask?.description || 'Structured discovery for local deals, jobs, housing, and services.'}</p>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
@@ -208,7 +216,7 @@ function DirectoryHome({ primaryTask, enabledTasks, listingPosts, classifiedPost
                     <Link key={task.key} href={task.route} className={`rounded-[1.6rem] p-5 ${tone.soft}`}>
                       <Icon className="h-5 w-5" />
                       <h3 className="mt-4 text-lg font-semibold">{task.label}</h3>
-                      <p className={`mt-2 text-sm leading-7 ${tone.muted}`}>{task.description}</p>
+                    <p className={`mt-2 text-sm leading-7 ${tone.muted}`}>{task.description}</p>
                     </Link>
                   )
                 })}
@@ -221,10 +229,10 @@ function DirectoryHome({ primaryTask, enabledTasks, listingPosts, classifiedPost
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="flex items-end justify-between gap-4 border-b border-border pb-6">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Featured businesses</p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em]">Strong listings with clearer trust cues.</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Featured marketplace posts</p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em]">Trending deals and visual posts with clearer trust cues.</h2>
           </div>
-          <Link href="/listings" className="text-sm font-semibold text-primary hover:opacity-80">Open listings</Link>
+          <Link href="/classifieds" className="text-sm font-semibold text-primary hover:opacity-80">Open classifieds</Link>
         </div>
         <div className="mt-8 grid gap-6 lg:grid-cols-3">
           {featuredListings.map((post) => (
@@ -237,11 +245,11 @@ function DirectoryHome({ primaryTask, enabledTasks, listingPosts, classifiedPost
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-14 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8">
           <div className={`rounded-[2rem] p-7 ${tone.panel}`}>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] opacity-70">What makes this different</p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em]">Built like a business directory, not a recolored content site.</h2>
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em]">Built for classifieds and image sharing, not a generic feed.</h2>
             <ul className={`mt-6 space-y-3 text-sm leading-7 ${tone.muted}`}>
-              <li>Search-first hero instead of a magazine headline.</li>
-              <li>Action-oriented listing cards with trust metadata.</li>
-              <li>Support lanes for offers, businesses, and profiles.</li>
+              <li>Search-first hero with location and urgency cues.</li>
+              <li>Action-oriented cards for both deal posts and image posts.</li>
+              <li>High-contrast utility surfaces for quick daily browsing.</li>
             </ul>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
@@ -524,25 +532,14 @@ export default async function HomePage() {
     <div className="min-h-screen bg-background text-foreground">
       <NavbarShell />
       <SchemaJsonLd data={schemaData} />
-      {productKind === 'directory' ? (
-        <DirectoryHome
-          primaryTask={primaryTask}
-          enabledTasks={enabledTasks}
-          listingPosts={listingPosts}
-          classifiedPosts={classifiedPosts}
-          profilePosts={profilePosts}
-          brandPack={recipe.brandPack}
-        />
-      ) : null}
-      {productKind === 'editorial' ? (
-        <EditorialHome primaryTask={primaryTask} articlePosts={articlePosts} supportTasks={supportTasks} />
-      ) : null}
-      {productKind === 'visual' ? (
-        <VisualHome primaryTask={primaryTask} imagePosts={imagePosts} profilePosts={profilePosts} articlePosts={articlePosts} />
-      ) : null}
-      {productKind === 'curation' ? (
-        <CurationHome primaryTask={primaryTask} bookmarkPosts={bookmarkPosts} profilePosts={profilePosts} articlePosts={articlePosts} />
-      ) : null}
+      <DirectoryHome
+        primaryTask={primaryTask}
+        enabledTasks={enabledTasks}
+        listingPosts={listingPosts}
+        classifiedPosts={classifiedPosts}
+        profilePosts={profilePosts}
+        brandPack={recipe.brandPack}
+      />
       <Footer />
     </div>
   )

@@ -9,11 +9,11 @@ import { CONTACT_PAGE_OVERRIDE_ENABLED, ContactPageOverride } from '@/overrides/
 function getTone(kind: ReturnType<typeof getProductKind>) {
   if (kind === 'directory') {
     return {
-      shell: 'bg-[#f8fbff] text-slate-950',
-      panel: 'border border-slate-200 bg-white',
-      soft: 'border border-slate-200 bg-slate-50',
-      muted: 'text-slate-600',
-      action: 'bg-slate-950 text-white hover:bg-slate-800',
+      shell: 'bg-[linear-gradient(180deg,#081310_0%,#060d0b_100%)] text-[#d5fff0]',
+      panel: 'border border-[#1e4b3a] bg-[rgba(8,20,16,0.9)] shadow-[0_18px_48px_rgba(46,255,176,0.14)]',
+      soft: 'border border-[#1e4b3a] bg-[#0b1f19]',
+      muted: 'text-[#90dcbc]',
+      action: 'bg-[#22e39b] text-[#052d20] hover:bg-[#16cc88]',
     }
   }
   if (kind === 'editorial') {
@@ -83,8 +83,16 @@ export default function ContactPage() {
         <section className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] opacity-70">Contact {SITE_CONFIG.name}</p>
-            <h1 className="mt-4 text-5xl font-semibold tracking-[-0.05em]">A support page that matches the product, not a generic contact form.</h1>
-            <p className={`mt-5 max-w-2xl text-sm leading-8 ${tone.muted}`}>Tell us what you are trying to publish, fix, or launch. We will route it through the right lane instead of forcing every request into the same support bucket.</p>
+            <h1 className="mt-4 text-5xl font-semibold tracking-[-0.05em]">Need help posting, verifying, or scaling marketplace activity?</h1>
+            <p className={`mt-5 max-w-2xl text-sm leading-8 ${tone.muted}`}>Tell us what you are trying to publish, fix, or launch. We route each request through the right support lane for classifieds and image sharing.</p>
+            <div className={`mt-6 rounded-2xl p-5 ${tone.soft}`}>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] opacity-80">Typical response times</p>
+              <div className={`mt-3 grid gap-3 text-sm ${tone.muted} sm:grid-cols-3`}>
+                <div>General support: under 24h</div>
+                <div>Trust reports: under 12h</div>
+                <div>Urgent issues: same day</div>
+              </div>
+            </div>
             <div className="mt-8 space-y-4">
               {lanes.map((lane) => (
                 <div key={lane.title} className={`rounded-[1.6rem] p-5 ${tone.soft}`}>
@@ -98,6 +106,7 @@ export default function ContactPage() {
 
           <div className={`rounded-[2rem] p-7 ${tone.panel}`}>
             <h2 className="text-2xl font-semibold">Send a message</h2>
+            <p className={`mt-2 text-sm ${tone.muted}`}>Include page URL, issue details, and what outcome you expect for faster resolution.</p>
             <form className="mt-6 grid gap-4">
               <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Your name" />
               <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Email address" />

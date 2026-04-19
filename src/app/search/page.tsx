@@ -84,15 +84,15 @@ export default async function SearchPage({
           {category ? <input type="hidden" name="category" value={category} /> : null}
           {task ? <input type="hidden" name="task" value={task} /> : null}
           <div className="relative w-full sm:w-80">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7affc8]" />
             <Input
               name="q"
               defaultValue={query}
-              placeholder="Search across tasks..."
-              className="h-11 pl-9"
+              placeholder="Search classifieds..."
+              className="h-11 border-[#1e6c4e] bg-[#0b1f19] pl-9 text-[#d5fff0]"
             />
           </div>
-          <Button type="submit" className="h-11">
+          <Button type="submit" className="h-11 bg-[#22e39b] text-[#052d20] hover:bg-[#16cc88]">
             Search
           </Button>
         </form>
@@ -107,7 +107,7 @@ export default async function SearchPage({
           })}
         </div>
       ) : (
-        <div className="rounded-2xl border border-dashed border-border p-10 text-center text-muted-foreground">
+        <div className="rounded-2xl border border-dashed border-[#1e6c4e] bg-[#0b1f19] p-10 text-center text-[#8ceec7]">
           No matching posts yet.
         </div>
       )}

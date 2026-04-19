@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Bookmark, Building2, FileText, Image as ImageIcon, Sparkles } from 'lucide-react'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
+import { AuthFormPanel } from '@/components/auth/auth-form-panel'
 import { getFactoryState } from '@/design/factory/get-factory-state'
 import { getProductKind } from '@/design/factory/get-product-kind'
 import { REGISTER_PAGE_OVERRIDE_ENABLED, RegisterPageOverride } from '@/overrides/register-page'
@@ -9,14 +10,14 @@ import { REGISTER_PAGE_OVERRIDE_ENABLED, RegisterPageOverride } from '@/override
 function getRegisterConfig(kind: ReturnType<typeof getProductKind>) {
   if (kind === 'directory') {
     return {
-      shell: 'bg-[#f8fbff] text-slate-950',
-      panel: 'border border-slate-200 bg-white',
-      side: 'border border-slate-200 bg-slate-50',
-      muted: 'text-slate-600',
-      action: 'bg-slate-950 text-white hover:bg-slate-800',
+      shell: 'bg-[linear-gradient(180deg,#081310_0%,#060d0b_100%)] text-[#d5fff0]',
+      panel: 'border border-[#1e4b3a] bg-[rgba(8,20,16,0.9)] shadow-[0_18px_48px_rgba(46,255,176,0.14)]',
+      side: 'border border-[#1e4b3a] bg-[#0b1f19]',
+      muted: 'text-[#90dcbc]',
+      action: 'bg-[#22e39b] text-[#052d20] hover:bg-[#16cc88]',
       icon: Building2,
-      title: 'Create a business-ready account',
-      body: 'List services, manage locations, and activate trust signals with a proper directory workflow.',
+      title: 'Create your classifieds account',
+      body: 'Post ads, track leads, and manage your local marketplace activity from one place.',
     }
   }
   if (kind === 'editorial') {
@@ -75,7 +76,7 @@ export default function RegisterPage() {
             <h1 className="mt-5 text-4xl font-semibold tracking-[-0.05em]">{config.title}</h1>
             <p className={`mt-5 text-sm leading-8 ${config.muted}`}>{config.body}</p>
             <div className="mt-8 grid gap-4">
-              {['Different onboarding per product family', 'No repeated one-size-fits-all shell', 'Profile, publishing, and discovery aligned'].map((item) => (
+              {['Simple signup flow', 'Built for local classifieds use', 'Ready for fast posting and response'].map((item) => (
                 <div key={item} className="rounded-[1.5rem] border border-current/10 px-4 py-4 text-sm">{item}</div>
               ))}
             </div>
@@ -83,13 +84,7 @@ export default function RegisterPage() {
 
           <div className={`rounded-[2rem] p-8 ${config.panel}`}>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] opacity-70">Create account</p>
-            <form className="mt-6 grid gap-4">
-              <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Full name" />
-              <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Email address" />
-              <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Password" type="password" />
-              <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="What are you creating or publishing?" />
-              <button type="submit" className={`inline-flex h-12 items-center justify-center rounded-full px-6 text-sm font-semibold ${config.action}`}>Create account</button>
-            </form>
+            <AuthFormPanel mode="register" actionClassName={config.action} />
             <div className={`mt-6 flex items-center justify-between text-sm ${config.muted}`}>
               <span>Already have an account?</span>
               <Link href="/login" className="inline-flex items-center gap-2 font-semibold hover:underline">

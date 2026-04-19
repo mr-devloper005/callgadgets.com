@@ -29,12 +29,12 @@ const variantShells = {
   'listing-showcase': 'bg-[linear-gradient(180deg,#ffffff_0%,#f4f9ff_100%)]',
   'article-editorial': 'bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,0.08),transparent_20%),linear-gradient(180deg,#fff8ef_0%,#ffffff_100%)]',
   'article-journal': 'bg-[linear-gradient(180deg,#fffdf9_0%,#f7f1ea_100%)]',
-  'image-masonry': 'bg-[linear-gradient(180deg,#09101d_0%,#111c2f_100%)] text-white',
-  'image-portfolio': 'bg-[linear-gradient(180deg,#07111f_0%,#13203a_100%)] text-white',
+  'image-masonry': 'bg-[radial-gradient(circle_at_top_left,rgba(46,255,176,0.12),transparent_24%),linear-gradient(180deg,#081310_0%,#060d0b_100%)] text-[#d5fff0]',
+  'image-portfolio': 'bg-[radial-gradient(circle_at_top_left,rgba(46,255,176,0.12),transparent_24%),linear-gradient(180deg,#081310_0%,#060d0b_100%)] text-[#d5fff0]',
   'profile-creator': 'bg-[linear-gradient(180deg,#0a1120_0%,#101c34_100%)] text-white',
   'profile-business': 'bg-[linear-gradient(180deg,#f6fbff_0%,#ffffff_100%)]',
-  'classified-bulletin': 'bg-[linear-gradient(180deg,#edf3e4_0%,#ffffff_100%)]',
-  'classified-market': 'bg-[linear-gradient(180deg,#f4f6ef_0%,#ffffff_100%)]',
+  'classified-bulletin': 'bg-[linear-gradient(180deg,#081310_0%,#060d0b_100%)] text-[#d5fff0]',
+  'classified-market': 'bg-[radial-gradient(circle_at_top_left,rgba(46,255,176,0.12),transparent_22%),linear-gradient(180deg,#081310_0%,#060d0b_100%)] text-[#d5fff0]',
   'sbm-curation': 'bg-[linear-gradient(180deg,#fff7ee_0%,#ffffff_100%)]',
   'sbm-library': 'bg-[linear-gradient(180deg,#f7f8fc_0%,#ffffff_100%)]',
 } as const
@@ -63,11 +63,11 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
   const isDark = ['image-masonry', 'image-portfolio', 'profile-creator'].includes(layoutKey)
   const ui = isDark
     ? {
-        muted: 'text-slate-300',
-        panel: 'border border-white/10 bg-white/6',
-        soft: 'border border-white/10 bg-white/5',
-        input: 'border-white/10 bg-white/6 text-white',
-        button: 'bg-white text-slate-950 hover:bg-slate-200',
+        muted: 'text-[#90dcbc]',
+        panel: 'border border-[#1e4b3a] bg-[rgba(8,20,16,0.9)] shadow-[0_18px_48px_rgba(46,255,176,0.12)]',
+        soft: 'border border-[#1e4b3a] bg-[#0d231d]',
+        input: 'border-[#1e6c4e] bg-[#0b1f19] text-[#d5fff0]',
+        button: 'bg-[#22e39b] text-[#052d20] hover:bg-[#16cc88]',
       }
     : layoutKey.startsWith('article') || layoutKey.startsWith('sbm')
       ? {
@@ -78,11 +78,11 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
           button: 'bg-[#2f1d16] text-[#fff4e4] hover:bg-[#452920]',
         }
       : {
-          muted: 'text-slate-600',
-          panel: 'border border-slate-200 bg-white',
-          soft: 'border border-slate-200 bg-slate-50',
-          input: 'border border-slate-200 bg-white text-slate-950',
-          button: 'bg-slate-950 text-white hover:bg-slate-800',
+          muted: 'text-[#90dcbc]',
+          panel: 'border border-[#1e4b3a] bg-[rgba(8,20,16,0.9)] shadow-[0_18px_48px_rgba(46,255,176,0.12)]',
+          soft: 'border border-[#1e4b3a] bg-[#0d231d]',
+          input: 'border border-[#1e6c4e] bg-[#0b1f19] text-[#d5fff0]',
+          button: 'bg-[#22e39b] text-[#052d20] hover:bg-[#16cc88]',
         }
 
   return (
@@ -126,10 +126,12 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
               <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.24em] opacity-70"><Icon className="h-4 w-4" /> {taskConfig?.label || task}</div>
               <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-foreground">{taskConfig?.description || 'Latest posts'}</h1>
               <p className={`mt-4 max-w-2xl text-sm leading-7 ${ui.muted}`}>Built with a cleaner scan rhythm, stronger metadata grouping, and a structure designed for business discovery rather than editorial reading.</p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link href={taskConfig?.route || '#'} className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ${ui.button}`}>Explore results <ArrowRight className="h-4 w-4" /></Link>
-                <Link href="/search" className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ${ui.soft}`}>Open search</Link>
-              </div>
+              {task !== 'classified' && task !== 'image' ? (
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <Link href={taskConfig?.route || '#'} className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ${ui.button}`}>Explore results <ArrowRight className="h-4 w-4" /></Link>
+                  <Link href="/search" className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ${ui.soft}`}>Open search</Link>
+                </div>
+              ) : null}
             </div>
             <form className={`grid gap-3 rounded-[2rem] p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)] ${ui.soft}`} action={taskConfig?.route || '#'}>
               <div>
@@ -173,10 +175,10 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
           <section className="mb-12 grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
             <div>
               <div className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] ${ui.soft}`}>
-                <Icon className="h-3.5 w-3.5" /> Visual feed
+                <Icon className="h-3.5 w-3.5" /> Image sharing
               </div>
               <h1 className="mt-5 text-5xl font-semibold tracking-[-0.05em]">{taskConfig?.description || 'Latest posts'}</h1>
-              <p className={`mt-5 max-w-2xl text-sm leading-8 ${ui.muted}`}>This surface leans into stronger imagery, larger modules, and more expressive spacing so visual content feels materially different from reading and directory pages.</p>
+              <p className={`mt-5 max-w-2xl text-sm leading-8 ${ui.muted}`}>Share, discover, and browse image posts in the same neon marketplace language as the homepage.</p>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className={`min-h-[220px] rounded-[2rem] ${ui.panel}`} />
@@ -203,10 +205,10 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
           <section className="mb-12 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
             <div className={`rounded-[1.8rem] p-6 ${ui.panel}`}>
               <p className={`text-xs uppercase tracking-[0.3em] ${ui.muted}`}>{taskConfig?.label || task}</p>
-              <h1 className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-foreground">Fast-moving notices, offers, and responses in a compact board format.</h1>
+              <h1 className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-foreground">Fast-moving local jobs, rentals, deals, and services in a compact board format.</h1>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-              {['Quick to scan', 'Shorter response path', 'Clearer urgency cues'].map((item) => (
+              {['Quick to scan', 'Price and location first', 'Clear urgency cues'].map((item) => (
                 <div key={item} className={`rounded-[1.5rem] p-5 ${ui.soft}`}>
                   <p className="text-sm font-semibold">{item}</p>
                 </div>
@@ -243,11 +245,13 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
             {intro.paragraphs.map((paragraph) => (
               <p key={paragraph.slice(0, 40)} className={`mt-4 text-sm leading-7 ${ui.muted}`}>{paragraph}</p>
             ))}
-            <div className="mt-4 flex flex-wrap gap-4 text-sm">
-              {intro.links.map((link) => (
-                <a key={link.href} href={link.href} className="font-semibold text-foreground hover:underline">{link.label}</a>
-              ))}
-            </div>
+            {task !== 'classified' && task !== 'image' ? (
+              <div className="mt-4 flex flex-wrap gap-4 text-sm">
+                {intro.links.map((link) => (
+                  <a key={link.href} href={link.href} className="font-semibold text-foreground hover:underline">{link.label}</a>
+                ))}
+              </div>
+            ) : null}
           </section>
         ) : null}
 

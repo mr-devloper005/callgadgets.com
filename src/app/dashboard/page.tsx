@@ -5,9 +5,8 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import {
   LayoutDashboard,
-  FileText,
-  Store,
   Tag,
+  Image as ImageIcon,
   BarChart3,
   MessageSquare,
   Heart,
@@ -40,6 +39,7 @@ import { useAuth } from "@/lib/auth-context"
 import { useToast } from "@/components/ui/use-toast"
 import { loadFromStorage, storageKeys } from "@/lib/local-storage"
 import type { Article, Listing, ClassifiedAd } from "@/types"
+import { Footer } from "@/components/shared/footer"
 import {
   Area,
   AreaChart,
@@ -256,15 +256,15 @@ export default function DashboardPage() {
   )
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[linear-gradient(180deg,#081310_0%,#060d0b_100%)] text-[#d5fff0]">
       <NavbarShell />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
-            <p className="text-muted-foreground mt-1">
+            <h1 className="text-3xl font-bold text-[#d5fff0]">Dashboard</h1>
+            <p className="mt-1 text-[#90dcbc]">
               Welcome back, {user?.name || "User"}! Here's what's happening.
             </p>
           </div>
@@ -288,21 +288,15 @@ export default function DashboardPage() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard/articles/new">
-                    <FileText className="h-4 w-4 mr-2" />
-                    New Article
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard/listings/new">
-                    <Store className="h-4 w-4 mr-2" />
-                    New Listing
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
                   <Link href="/dashboard/ads/new">
                     <Tag className="h-4 w-4 mr-2" />
                     New Ad
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/create/image">
+                    <ImageIcon className="h-4 w-4 mr-2" />
+                    New Image Post
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -318,11 +312,11 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="bg-card rounded-xl border border-border p-6"
+              className="rounded-xl border border-[#1e4b3a] bg-[rgba(8,20,16,0.9)] p-6 shadow-[0_14px_36px_rgba(46,255,176,0.12)]"
             >
               <div className="flex items-center justify-between mb-4">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <stat.icon className="h-5 w-5 text-primary" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#103227]">
+                  <stat.icon className="h-5 w-5 text-[#7affc8]" />
                 </div>
                 <Badge
                   variant="secondary"
@@ -340,8 +334,8 @@ export default function DashboardPage() {
                   {stat.change}
                 </Badge>
               </div>
-              <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-              <p className="text-sm text-muted-foreground">{stat.title}</p>
+              <p className="text-2xl font-bold text-[#d5fff0]">{stat.value}</p>
+              <p className="text-sm text-[#90dcbc]">{stat.title}</p>
             </motion.div>
           ))}
         </div>
@@ -355,7 +349,7 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-card rounded-xl border border-border p-6"
+              className="rounded-xl border border-[#1e4b3a] bg-[rgba(8,20,16,0.9)] p-6 shadow-[0_14px_36px_rgba(46,255,176,0.12)]"
             >
               <div className="flex items-center justify-between mb-6">
                 <div>
@@ -433,158 +427,24 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-card rounded-xl border border-border"
+              className="rounded-xl border border-[#1e4b3a] bg-[rgba(8,20,16,0.9)] shadow-[0_14px_36px_rgba(46,255,176,0.12)]"
             >
-              <Tabs defaultValue="articles" className="w-full">
+              <Tabs defaultValue="ads" className="w-full">
                 <div className="px-6 pt-6">
                   <h2 className="text-lg font-semibold text-foreground mb-4">
                     My Content
                   </h2>
                   <TabsList className="w-full justify-start bg-muted/50">
-                    <TabsTrigger value="articles">Articles</TabsTrigger>
-                    <TabsTrigger value="listings">Listings</TabsTrigger>
-                    <TabsTrigger value="ads">Ads</TabsTrigger>
+                    <TabsTrigger value="ads">Classified Ads</TabsTrigger>
                   </TabsList>
                 </div>
-
-                <TabsContent value="articles" className="p-6 pt-4">
-                  <div className="space-y-4">
-                    {myContent.articles.map((article) => (
-                      <div
-                        key={article.id}
-                        className="flex items-center justify-between p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
-                      >
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-medium text-foreground truncate">
-                            {article.title}
-                          </h3>
-                          <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
-                            <span>{article.date}</span>
-                            <span>{article.views} views</span>
-                            <span>{article.likes} likes</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-3 ml-4">
-                          <Badge
-                            variant={
-                              article.status === "published"
-                                ? "default"
-                                : "secondary"
-                            }
-                          >
-                            {article.status}
-                          </Badge>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon">
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem asChild>
-                                <Link href={`/dashboard/articles/${article.id}/edit`}>
-                                  <Edit className="h-4 w-4 mr-2" />
-                                  Edit
-                                </Link>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem asChild>
-                                <Link href={`/dashboard/articles/${article.id}`}>
-                                  <ExternalLink className="h-4 w-4 mr-2" />
-                                  View
-                                </Link>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem asChild>
-                                <Link href={`/dashboard/articles/${article.id}/edit`}>
-                                  <Trash2 className="h-4 w-4 mr-2" />
-                                  Delete
-                                </Link>
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <Button variant="outline" className="w-full mt-4" asChild>
-                    <Link href="/dashboard/articles">
-                      View all articles
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Link>
-                  </Button>
-                </TabsContent>
-
-                <TabsContent value="listings" className="p-6 pt-4">
-                  <div className="space-y-4">
-                    {myContent.listings.map((listing) => (
-                      <div
-                        key={listing.id}
-                        className="flex items-center justify-between p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
-                      >
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-medium text-foreground truncate">
-                            {listing.title}
-                          </h3>
-                          <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
-                            <span>{listing.date}</span>
-                            <span>{listing.views} views</span>
-                            <span>{listing.inquiries} inquiries</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-3 ml-4">
-                          <Badge
-                            variant={
-                              listing.status === "active"
-                                ? "default"
-                                : "secondary"
-                            }
-                          >
-                            {listing.status}
-                          </Badge>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon">
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem asChild>
-                                <Link href={`/dashboard/listings/${listing.id}/edit`}>
-                                  <Edit className="h-4 w-4 mr-2" />
-                                  Edit
-                                </Link>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem asChild>
-                                <Link href={`/dashboard/listings/${listing.id}`}>
-                                  <ExternalLink className="h-4 w-4 mr-2" />
-                                  View
-                                </Link>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem asChild>
-                                <Link href={`/dashboard/listings/${listing.id}/edit`}>
-                                  <Trash2 className="h-4 w-4 mr-2" />
-                                  Delete
-                                </Link>
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <Button variant="outline" className="w-full mt-4" asChild>
-                    <Link href="/dashboard/listings">
-                      View all listings
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Link>
-                  </Button>
-                </TabsContent>
 
                 <TabsContent value="ads" className="p-6 pt-4">
                   <div className="space-y-4">
                     {myContent.ads.map((ad) => (
                       <div
                         key={ad.id}
-                        className="flex items-center justify-between p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+                        className="flex items-center justify-between rounded-lg border border-[#1f5f48] bg-[#0b1f19] p-4 transition-colors hover:bg-[#123226]"
                       >
                         <div className="flex-1 min-w-0">
                           <h3 className="font-medium text-foreground truncate">
@@ -659,7 +519,7 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="bg-card rounded-xl border border-border p-6"
+              className="rounded-xl border border-[#1e4b3a] bg-[rgba(8,20,16,0.9)] p-6 shadow-[0_14px_36px_rgba(46,255,176,0.12)]"
             >
               <h2 className="text-lg font-semibold text-foreground mb-4">
                 Content Distribution
@@ -698,7 +558,7 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="bg-card rounded-xl border border-border p-6"
+              className="rounded-xl border border-[#1e4b3a] bg-[rgba(8,20,16,0.9)] p-6 shadow-[0_14px_36px_rgba(46,255,176,0.12)]"
             >
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-foreground">
@@ -737,26 +597,12 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="bg-card rounded-xl border border-border p-6"
+              className="rounded-xl border border-[#1e4b3a] bg-[rgba(8,20,16,0.9)] p-6 shadow-[0_14px_36px_rgba(46,255,176,0.12)]"
             >
               <h2 className="text-lg font-semibold text-foreground mb-4">
                 Quick Actions
               </h2>
               <div className="space-y-2">
-                <Button variant="outline" className="w-full justify-start" asChild>
-                  <Link href="/dashboard/articles/new">
-                    <FileText className="h-4 w-4 mr-3" />
-                    Write new article
-                    <ChevronRight className="h-4 w-4 ml-auto" />
-                  </Link>
-                </Button>
-                <Button variant="outline" className="w-full justify-start" asChild>
-                  <Link href="/dashboard/listings/new">
-                    <Store className="h-4 w-4 mr-3" />
-                    Add business listing
-                    <ChevronRight className="h-4 w-4 ml-auto" />
-                  </Link>
-                </Button>
                 <Button variant="outline" className="w-full justify-start" asChild>
                   <Link href="/dashboard/ads/new">
                     <Tag className="h-4 w-4 mr-3" />
@@ -765,9 +611,16 @@ export default function DashboardPage() {
                   </Link>
                 </Button>
                 <Button variant="outline" className="w-full justify-start" asChild>
-                  <Link href="/sbm">
+                  <Link href="/images">
+                    <ImageIcon className="h-4 w-4 mr-3" />
+                    Open Image Sharing
+                    <ChevronRight className="h-4 w-4 ml-auto" />
+                  </Link>
+                </Button>
+                <Button variant="outline" className="w-full justify-start border-[#1f5f48] text-[#8ceec7] hover:bg-[#123226]" asChild>
+                  <Link href="/classifieds">
                     <BarChart3 className="h-4 w-4 mr-3" />
-                    Open Social Bookmarks
+                    Open Classifieds Board
                     <ChevronRight className="h-4 w-4 ml-auto" />
                   </Link>
                 </Button>
@@ -776,6 +629,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   )
 }

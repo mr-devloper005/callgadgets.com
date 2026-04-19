@@ -54,8 +54,8 @@ export function TaskListClient({ task, initialPosts, category }: Props) {
 
   if (!merged.length) {
     return (
-      <div className="rounded-2xl border border-dashed border-border p-10 text-center text-muted-foreground">
-        No posts yet for this section.
+      <div className="rounded-2xl border border-dashed border-[#1e6c4e] bg-[#0b1f19] p-10 text-center text-[#8ceec7]">
+        No listings in this category yet. Try another filter or check back soon.
       </div>
     );
   }
