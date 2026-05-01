@@ -1,7 +1,7 @@
 import { ContentImage } from "@/components/shared/content-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MapPin, Globe, Phone, Tag, Mail } from "lucide-react";
+import { MapPin, Globe, Phone, Tag, Mail, Share2 } from "lucide-react";
 import { NavbarShell } from "@/components/shared/navbar-shell";
 import { Footer } from "@/components/shared/footer";
 import { TaskPostCard } from "@/components/shared/task-post-card";
@@ -15,6 +15,13 @@ import { cn } from "@/lib/utils";
 import { ArticleComments } from "@/components/tasks/article-comments";
 import { SchemaJsonLd } from "@/components/seo/schema-jsonld";
 import { RichContent, formatRichHtml } from "@/components/shared/rich-content";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { getFactoryState } from "@/design/factory/get-factory-state";
 import { getProductKind } from "@/design/factory/get-product-kind";
 import { DirectoryTaskDetailPage } from "@/design/products/directory/task-detail-page";
@@ -61,6 +68,22 @@ const formatArticleHtml = (content: PostContent, post: SitePost) => {
     "";
 
   return formatRichHtml(raw, "Details coming soon.");
+};
+
+const dedupeRepeatedAnchors = (html: string) => {
+  const anchorRegex = /<a\b[^>]*href=(["'])(.*?)\1[^>]*>([\s\S]*?)<\/a>/gi;
+  const seen = new Set<string>();
+
+  return html.replace(anchorRegex, (full, _quote, href, label) => {
+    const key = `${String(href).trim().toLowerCase()}::${String(label)
+      .replace(/<[^>]*>/g, "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLowerCase()}`;
+    if (seen.has(key)) return "";
+    seen.add(key);
+    return full;
+  });
 };
 
 const getImageUrls = (post: SitePost, content: PostContent) => {
@@ -143,9 +166,11 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
   const content = getContent(post);
   const isClassified = task === "classified";
   const isArticle = task === "article";
+  const isImage = task === "image";
   const category = content.category || post.tags?.[0] || taskConfig?.label || task;
   const description = content.description || post.summary || "Details coming soon.";
   const descriptionHtml = !isArticle ? formatRichHtml(description, "Details coming soon.") : "";
+  const descriptionHtmlDedupe = dedupeRepeatedAnchors(descriptionHtml);
   const articleHtml = isArticle ? formatArticleHtml(content, post) : "";
   const articleSummary =
     post.summary ||
@@ -167,7 +192,7 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
   const images = getImageUrls(post, content);
   const mapEmbedUrl = buildMapEmbedUrl(content.latitude, content.longitude, location);
   const isBookmark = task === "sbm" || task === "social";
-  const hideSidebar = isClassified || isArticle || task === "image" || isBookmark;
+  const hideSidebar = isClassified || isArticle || isImage || isBookmark;
   const related = (await fetchTaskPosts(task, 6))
     .filter((item) => item.slug !== post.slug)
     .filter((item) => {
@@ -177,6 +202,7 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
     })
     .slice(0, 3);
   const articleUrl = `${SITE_CONFIG.baseUrl.replace(/\/$/, "")}${taskConfig?.route || "/articles"}/${post.slug}`;
+  const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(articleUrl)}`;
   const articleImage = absoluteUrl(images[0]) || absoluteUrl(SITE_CONFIG.defaultOgImage);
   const articleSchema = isArticle
     ? {
@@ -310,28 +336,125 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
 
             {!isArticle ? (
               <>
-                {!isBookmark ? (
+                {isImage ? (
+                  <div className="overflow-hidden rounded-3xl border border-[#203a67] bg-[radial-gradient(circle_at_20%_20%,#1b4c83_0%,#102a4b_45%,#091a33_100%)] text-white shadow-[0_20px_60px_rgba(8,22,46,0.45)]">
+                    <div className="border-b border-white/15 p-6 sm:p-8">
+                      <div className="flex items-start gap-4">
+                        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-white/80 bg-[linear-gradient(135deg,#6a82fb_0%,#a855f7_100%)] text-xl font-bold">
+                          {post.title.trim().charAt(0).toUpperCase() || "I"}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-wide text-white/90">
+                            Photos
+                          </p>
+                          <h1 className="mt-3 text-2xl font-semibold leading-tight sm:text-4xl">
+                            {post.title}
+                          </h1>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 px-6 py-4 sm:px-8">
+                      <Badge className="rounded-full bg-[#f6c76b] text-[#3f2e0a] hover:bg-[#f6c76b]">
+                        {category}
+                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="border-white/30 bg-transparent text-white hover:bg-white/10"
+                            >
+                              Photos
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-h-[85vh] max-w-5xl overflow-y-auto border-[#274d83] bg-[#0d2340] text-white">
+                            <DialogHeader>
+                              <DialogTitle>Photos</DialogTitle>
+                            </DialogHeader>
+                            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                              {images.map((src, index) => (
+                                <Dialog key={`${src}-${index}`}>
+                                  <DialogTrigger asChild>
+                                    <button
+                                      type="button"
+                                      className="relative aspect-[4/3] overflow-hidden rounded-xl border border-white/20 bg-[#0a1b32] text-left"
+                                      aria-label={`Open photo ${index + 1}`}
+                                    >
+                                      <ContentImage
+                                        src={src}
+                                        alt={`Photo ${index + 1} for ${post.title}`}
+                                        fill
+                                        className="object-cover transition-transform duration-200 hover:scale-[1.02]"
+                                      />
+                                    </button>
+                                  </DialogTrigger>
+                                  <DialogContent className="max-w-5xl border-[#274d83] bg-[#0d2340] p-3 text-white">
+                                    <DialogHeader>
+                                      <DialogTitle className="sr-only">
+                                        Photo {index + 1}
+                                      </DialogTitle>
+                                    </DialogHeader>
+                                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-[#08172c]">
+                                      <ContentImage
+                                        src={src}
+                                        alt={`Photo ${index + 1} for ${post.title}`}
+                                        fill
+                                        className="object-contain"
+                                      />
+                                    </div>
+                                  </DialogContent>
+                                </Dialog>
+                              ))}
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                        <Button
+                          asChild
+                          variant="outline"
+                          size="sm"
+                          className="border-white/30 bg-transparent text-white hover:bg-white/10"
+                        >
+                          <a href={shareUrl} target="_blank" rel="noreferrer">
+                            <Share2 className="mr-2 h-4 w-4" />
+                            Share
+                          </a>
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="grid gap-5 p-6 sm:p-8">
+                      <div className="rounded-2xl border border-[#79b3ff33] bg-[linear-gradient(135deg,rgba(23,53,94,0.92),rgba(14,35,63,0.9))] p-6 shadow-[0_16px_35px_rgba(4,12,28,0.4)]">
+                        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#8ec5ff]">Overview</p>
+                        <RichContent html={descriptionHtmlDedupe} className="text-[15px] leading-7 text-[#dbe9ff] [&_a]:text-[#ffd99b] [&_a]:underline" />
+                      </div>
+                    </div>
+                  </div>
+                ) : !isBookmark ? (
                   <div className={cn(isClassified ? "w-full" : "")}>
                     <TaskImageCarousel images={images} />
                   </div>
                 ) : null}
 
-                <div className={cn(isClassified ? "mx-auto w-full max-w-4xl" : "mt-6")}>
-                  <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                    <Badge variant="secondary" className="inline-flex items-center gap-1">
-                      <Tag className="h-3.5 w-3.5" />
-                      {category}
-                    </Badge>
-                    {location && (
-                      <span className="inline-flex items-center gap-1">
-                        <MapPin className="h-4 w-4" />
-                        {location}
-                      </span>
-                    )}
+                {!isImage ? (
+                  <div className={cn(isClassified ? "mx-auto w-full max-w-4xl" : "mt-6")}>
+                    <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                      <Badge variant="secondary" className="inline-flex items-center gap-1">
+                        <Tag className="h-3.5 w-3.5" />
+                        {category}
+                      </Badge>
+                      {location && (
+                        <span className="inline-flex items-center gap-1">
+                          <MapPin className="h-4 w-4" />
+                          {location}
+                        </span>
+                      )}
+                    </div>
+                    <h1 className="mt-4 text-3xl font-semibold text-foreground">{post.title}</h1>
+                    <RichContent html={descriptionHtml} className="mt-3 max-w-3xl" />
                   </div>
-                  <h1 className="mt-4 text-3xl font-semibold text-foreground">{post.title}</h1>
-                  <RichContent html={descriptionHtml} className="mt-3 max-w-3xl" />
-                </div>
+                ) : null}
               </>
             ) : null}
 
@@ -379,7 +502,7 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
               </div>
             ) : null}
 
-            {content.highlights?.length && !isArticle ? (
+            {content.highlights?.length && !isArticle && !isImage ? (
               <div className={cn("mt-8 rounded-2xl border border-border bg-card p-6", isClassified ? "mx-auto w-full max-w-4xl" : "")}>
                 <h2 className="text-lg font-semibold text-foreground">Highlights</h2>
                 <ul className="mt-4 space-y-2 text-sm text-muted-foreground">

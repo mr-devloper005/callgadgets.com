@@ -51,6 +51,9 @@ export default function ContactPage() {
   const { recipe } = getFactoryState()
   const productKind = getProductKind(recipe)
   const tone = getTone(productKind)
+  const contactEmail =
+    process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() ||
+    `support@${SITE_CONFIG.domain}`
   const lanes =
     productKind === 'directory'
       ? [
@@ -107,6 +110,21 @@ export default function ContactPage() {
           <div className={`rounded-[2rem] p-7 ${tone.panel}`}>
             <h2 className="text-2xl font-semibold">Send a message</h2>
             <p className={`mt-2 text-sm ${tone.muted}`}>Include page URL, issue details, and what outcome you expect for faster resolution.</p>
+            <div className={`mt-4 rounded-xl p-4 ${tone.soft}`}>
+              <p className={`text-xs uppercase tracking-[0.2em] ${tone.muted}`}>Email support</p>
+              <a
+                href={`mailto:${contactEmail}`}
+                className="mt-2 block text-sm font-semibold hover:underline"
+              >
+                {contactEmail}
+              </a>
+              <a
+                href={`mailto:${contactEmail}`}
+                className={`mt-3 inline-flex h-10 items-center justify-center rounded-full px-5 text-sm font-semibold ${tone.action}`}
+              >
+                Email us
+              </a>
+            </div>
             <form className="mt-6 grid gap-4">
               <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Your name" />
               <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Email address" />
