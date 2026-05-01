@@ -4,7 +4,8 @@ import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
 import { TaskListClient } from '@/components/tasks/task-list-client'
 import { SchemaJsonLd } from '@/components/seo/schema-jsonld'
-import { fetchTaskPosts } from '@/lib/task-data'
+import { ContentImage } from '@/components/shared/content-image'
+import { fetchTaskPosts, getPostImages } from '@/lib/task-data'
 import { SITE_CONFIG, getTaskConfig, type TaskKey } from '@/lib/site-config'
 import { CATEGORY_OPTIONS, normalizeCategory } from '@/lib/categories'
 import { taskIntroCopy } from '@/config/site.content'
@@ -59,6 +60,10 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
   const layoutKey = recipe.taskLayouts[task as keyof typeof recipe.taskLayouts] || `${task}-${task === 'listing' ? 'directory' : 'editorial'}`
   const shellClass = variantShells[layoutKey as keyof typeof variantShells] || 'bg-background'
   const Icon = taskIcons[task] || LayoutGrid
+  const heroPreviewImages =
+    task === 'image'
+      ? posts.flatMap((post) => getPostImages(post)).filter(Boolean).slice(0, 3)
+      : []
 
   const isDark = ['image-masonry', 'image-portfolio', 'profile-creator'].includes(layoutKey)
   const ui = isDark
@@ -181,9 +186,33 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
               <p className={`mt-5 max-w-2xl text-sm leading-8 ${ui.muted}`}>Share, discover, and browse image posts in the same neon marketplace language as the homepage.</p>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className={`min-h-[220px] rounded-[2rem] ${ui.panel}`} />
-              <div className={`min-h-[220px] rounded-[2rem] ${ui.soft}`} />
-              <div className={`col-span-2 min-h-[120px] rounded-[2rem] ${ui.panel}`} />
+              <div className={`relative min-h-[220px] overflow-hidden rounded-[2rem] ${ui.panel}`}>
+                {heroPreviewImages[0] ? (
+                  <ContentImage src={heroPreviewImages[0]} alt="Latest gallery post preview 1" fill className="object-cover" />
+                ) : null}
+              </div>
+              <div className={`relative min-h-[220px] overflow-hidden rounded-[2rem] ${ui.soft}`}>
+                {heroPreviewImages[1] ? (
+                  <ContentImage src={heroPreviewImages[1]} alt="Latest gallery post preview 2" fill className="object-cover" />
+                ) : null}
+              </div>
+              <form className={`relative col-span-2 overflow-hidden rounded-[2rem] p-5 ${ui.panel}`} action={taskConfig?.route || '#'}>
+                {heroPreviewImages[2] ? (
+                  <ContentImage src={heroPreviewImages[2]} alt="Latest gallery post preview 3" fill className="object-cover opacity-30" />
+                ) : null}
+                <div className="relative z-10">
+                <p className={`text-xs font-semibold uppercase tracking-[0.24em] ${ui.muted}`}>Gallery filter</p>
+                <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+                  <select name="category" defaultValue={normalizedCategory} className={`h-11 flex-1 rounded-xl px-3 text-sm ${ui.input}`}>
+                    <option value="all">All categories</option>
+                    {CATEGORY_OPTIONS.map((item) => (
+                      <option key={item.slug} value={item.slug}>{item.name}</option>
+                    ))}
+                  </select>
+                  <button type="submit" className={`h-11 rounded-xl px-4 text-sm font-medium ${ui.button}`}>Apply</button>
+                </div>
+                </div>
+              </form>
             </div>
           </section>
         ) : null}
@@ -213,6 +242,18 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
                   <p className="text-sm font-semibold">{item}</p>
                 </div>
               ))}
+              <form className={`rounded-[1.5rem] p-5 sm:col-span-2 xl:col-span-3 ${ui.panel}`} action={taskConfig?.route || '#'}>
+                <p className={`text-xs uppercase tracking-[0.24em] ${ui.muted}`}>Category filter</p>
+                <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+                  <select name="category" defaultValue={normalizedCategory} className={`h-11 flex-1 rounded-xl px-3 text-sm ${ui.input}`}>
+                    <option value="all">All categories</option>
+                    {CATEGORY_OPTIONS.map((item) => (
+                      <option key={item.slug} value={item.slug}>{item.name}</option>
+                    ))}
+                  </select>
+                  <button type="submit" className={`h-11 rounded-xl px-4 text-sm font-medium ${ui.button}`}>Apply</button>
+                </div>
+              </form>
             </div>
           </section>
         ) : null}
