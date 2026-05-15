@@ -97,7 +97,7 @@ export function Navbar() {
   const { isAuthenticated } = useAuth()
   const { recipe } = getFactoryState()
 
-  const navigation = useMemo(() => SITE_CONFIG.tasks.filter((task) => task.enabled && (task.key === 'classified' || task.key === 'image')), [])
+  const navigation = useMemo(() => SITE_CONFIG.tasks.filter((task) => task.enabled && task.key !== 'classified' && task.key !== 'image'), [])
   const primaryNavigation = navigation.slice(0, 5)
   const mobileNavigation = navigation.map((task) => ({
     name: task.label,
@@ -120,7 +120,6 @@ export function Navbar() {
               </div>
               <div className="min-w-0 hidden sm:block">
                 <span className="block truncate text-xl font-semibold">{SITE_CONFIG.name}</span>
-                <span className="block text-[10px] uppercase tracking-[0.24em] opacity-60">{siteContent.navbar.tagline}</span>
               </div>
             </Link>
 
@@ -141,7 +140,7 @@ export function Navbar() {
               <Search className="h-4 w-4" />
               <input
                 name="q"
-                placeholder="Search classifieds and image posts"
+                placeholder="Search gadgets and electronics"
                 className="h-9 w-full bg-transparent text-sm text-[#d5fff0] placeholder:text-[#7ac9aa] focus:outline-none"
               />
               <button type="submit" className="inline-flex items-center rounded-full bg-[#22e39b] px-3 py-1.5 text-xs font-semibold text-[#052d20] hover:bg-[#16cc88]">
@@ -162,12 +161,6 @@ export function Navbar() {
                 <Button variant="ghost" size="sm" asChild className="rounded-full px-4">
                   <Link href="/login">Sign In</Link>
                 </Button>
-                <Button size="sm" asChild className={cn('rounded-full bg-[#22e39b] text-[#052d20] hover:bg-[#16cc88]', palette.cta)}>
-                  <Link href="/register">
-                    <Plus className="mr-1 h-4 w-4" />
-                    Post Ad
-                  </Link>
-                </Button>
               </div>
             )}
 
@@ -184,7 +177,7 @@ export function Navbar() {
                 <Search className="h-4 w-4" />
                 <input
                   name="q"
-                  placeholder="Search deals and image posts"
+                placeholder="Search gadgets and electronics"
                   className="h-8 w-full bg-transparent text-sm text-[#d5fff0] placeholder:text-[#7ac9aa] focus:outline-none"
                 />
                 <button type="submit" className="rounded-lg bg-[#22e39b] px-3 py-1 text-xs font-semibold text-[#052d20] hover:bg-[#16cc88]">
@@ -222,7 +215,6 @@ export function Navbar() {
             </div>
             <div className="min-w-0 hidden sm:block">
               <span className="block truncate text-xl font-semibold">{SITE_CONFIG.name}</span>
-              <span className="hidden text-[10px] uppercase tracking-[0.28em] opacity-70 sm:block">{siteContent.navbar.tagline}</span>
             </div>
           </Link>
 
