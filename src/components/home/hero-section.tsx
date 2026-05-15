@@ -118,28 +118,6 @@ export function HeroSection({ images, tasks }: { images: string[]; tasks: TaskCo
               </Button>
             </div>
 
-            <div className="mt-8 grid max-w-2xl gap-3 sm:grid-cols-[1.1fr_0.9fr]">
-              <div className={`flex items-center gap-3 rounded-[1.6rem] p-4 ${palette.card}`}>
-                <div className="rounded-full bg-white/10 p-3 text-current">
-                  <Search className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] opacity-70">Primary task</p>
-                  <p className="mt-1 text-lg font-semibold">{primaryTask?.label || SITE_CONFIG.name}</p>
-                  <p className="mt-1 text-sm opacity-75">{primaryTask?.description}</p>
-                </div>
-              </div>
-              <div className={`flex items-center gap-3 rounded-[1.6rem] p-4 ${palette.card}`}>
-                <div className="rounded-full bg-white/10 p-3 text-current">
-                  <Compass className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] opacity-70">Explore flow</p>
-                  <p className="mt-1 text-lg font-semibold">{featuredTasks.length} highlighted surfaces</p>
-                  <p className="mt-1 text-sm opacity-75">Built for discovery without repeating the same layout rhythm.</p>
-                </div>
-              </div>
-            </div>
           </div>
 
           <div className="space-y-4">
@@ -155,24 +133,6 @@ export function HeroSection({ images, tasks }: { images: string[]; tasks: TaskCo
                     intrinsicWidth={1000}
                     intrinsicHeight={1200}
                   />
-                </div>
-                <div className="flex flex-col justify-between gap-4">
-                  {featuredTasks.map((task, index) => (
-                    <div key={task.key} className="rounded-[1.4rem] border border-white/10 bg-black/10 p-4">
-                      <div className="flex items-center justify-between gap-3">
-                        <div>
-                          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] opacity-65">Lane {index + 1}</p>
-                          <p className="mt-2 text-xl font-semibold">{task.label}</p>
-                        </div>
-                        <Star className="h-4 w-4 opacity-70" />
-                      </div>
-                      <p className="mt-3 text-sm leading-6 opacity-75">{task.description}</p>
-                      <Link href={task.route} className="mt-4 inline-flex items-center gap-2 text-sm font-semibold underline underline-offset-4">
-                        Open section
-                        <ArrowRight className="h-4 w-4" />
-                      </Link>
-                    </div>
-                  ))}
                 </div>
               </div>
             </div>

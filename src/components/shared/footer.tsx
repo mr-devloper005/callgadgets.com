@@ -19,11 +19,7 @@ const taskIcons: Record<TaskKey, any> = {
 }
 
 const footerLinks = {
-  platform: SITE_CONFIG.tasks.filter((task) => task.enabled && (task.key === 'classified' || task.key === 'image')).map((task) => ({
-    name: task.label,
-    href: task.route,
-    icon: taskIcons[task.key] || LayoutGrid,
-  })),
+  platform: [],
   company: [
     { name: 'About', href: '/about' },
     { name: 'Team', href: '/team' },
@@ -105,30 +101,12 @@ export function Footer() {
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-3">
               <div>
-                <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Surfaces</h3>
-                <ul className="mt-4 space-y-3 text-sm text-slate-200">
-                  {footerLinks.platform.map((item: any) => (
-                    <li key={item.name}><Link href={item.href} className="flex items-center gap-2 hover:text-white">{item.icon ? <item.icon className="h-4 w-4" /> : null}{item.name}</Link></li>
-                  ))}
-                </ul>
-              </div>
-              <div>
                 <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Resources</h3>
                 <ul className="mt-4 space-y-3 text-sm text-slate-200">
                   {footerLinks.resources.map((item) => (
                     <li key={item.name}><Link href={item.href} className="hover:text-white">{item.name}</Link></li>
                   ))}
                 </ul>
-              </div>
-              <div>
-                <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Connect</h3>
-                <div className="mt-4 flex gap-3">
-                  {socialLinks.map((item) => (
-                    <Link key={item.name} href={item.href} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 bg-white/8 p-2.5 text-slate-200 hover:bg-white/12 hover:text-white">
-                      <item.icon className="h-4 w-4" />
-                    </Link>
-                  ))}
-                </div>
               </div>
             </div>
           </div>
@@ -184,12 +162,11 @@ export function Footer() {
               </div>
               <div>
                 <span className="block text-lg font-semibold">{SITE_CONFIG.name}</span>
-                <span className="text-xs uppercase tracking-[0.22em] text-[#7affc8]">Classifieds + Image Sharing</span>
               </div>
             </Link>
             <p className="mt-5 max-w-sm text-sm leading-7 text-[#90dcbc]">{SITE_CONFIG.description}</p>
           </div>
-          {(['platform', 'company', 'resources', 'legal'] as const).map((section) => (
+          {(['company', 'resources', 'legal'] as const).map((section) => (
             <div key={section}>
               <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-[#7affc8]">{section}</h3>
               <ul className="mt-5 space-y-3 text-sm text-[#90dcbc]">

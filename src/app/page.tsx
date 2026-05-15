@@ -157,10 +157,6 @@ function DirectoryHome({ primaryTask, enabledTasks, listingPosts, classifiedPost
         <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-18">
           <div className="grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
             <div>
-              <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] ${tone.badge}`}>
-                <Compass className="h-3.5 w-3.5" />
-                Classifieds + image sharing
-              </span>
               <h1 className={`mt-6 max-w-4xl text-5xl font-semibold tracking-[-0.06em] sm:text-6xl ${tone.title}`}>
                 Discover local deals and visual posts in one fast, trust-focused marketplace.
               </h1>
@@ -177,51 +173,10 @@ function DirectoryHome({ primaryTask, enabledTasks, listingPosts, classifiedPost
                   placeholder="Choose city or neighborhood"
                   className="rounded-full bg-black/5 px-4 py-3 text-sm text-current placeholder:opacity-70 focus:outline-none focus:ring-2 focus:ring-[#22e39b]/40"
                 />
-                <button type="submit" className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ${tone.action}`}>
-                  Search now
-                  <ArrowRight className="h-4 w-4" />
-                </button>
               </form>
 
-              <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                {[
-                  ['Fresh local posts', `${featuredListings.length || 3}+ active highlights`],
-                  ['Deals + visuals', 'Classified listings and image-led posts'],
-                  ['Action ready', 'Call, chat, shortlist, and respond'],
-                ].map(([label, value]) => (
-                  <div key={label} className={`rounded-[1.4rem] p-4 ${tone.soft}`}>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] opacity-70">{label}</p>
-                    <p className="mt-2 text-lg font-semibold">{value}</p>
-                  </div>
-                ))}
-              </div>
             </div>
 
-            <div className="grid gap-4">
-              <div className={`rounded-[2rem] p-6 ${tone.panel}`}>
-                <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] opacity-70">Primary lane</p>
-                    <h2 className="mt-2 text-3xl font-semibold">{primaryTask?.label || 'Classifieds'}</h2>
-                  </div>
-                  <ShieldCheck className="h-6 w-6" />
-                </div>
-                <p className={`mt-4 text-sm leading-7 ${tone.muted}`}>{primaryTask?.description || 'Structured discovery for local deals, jobs, housing, and services.'}</p>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                {quickRoutes.map((task) => {
-                  const Icon = taskIcons[task.key as TaskKey] || LayoutGrid
-                  return (
-                    <Link key={task.key} href={task.route} className={`rounded-[1.6rem] p-5 ${tone.soft}`}>
-                      <Icon className="h-5 w-5" />
-                      <h3 className="mt-4 text-lg font-semibold">{task.label}</h3>
-                    <p className={`mt-2 text-sm leading-7 ${tone.muted}`}>{task.description}</p>
-                    </Link>
-                  )
-                })}
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -232,7 +187,6 @@ function DirectoryHome({ primaryTask, enabledTasks, listingPosts, classifiedPost
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Featured marketplace posts</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em]">Trending deals and visual posts with clearer trust cues.</h2>
           </div>
-          <Link href="/classifieds" className="text-sm font-semibold text-primary hover:opacity-80">Open classifieds</Link>
         </div>
         <div className="mt-8 grid gap-6 lg:grid-cols-3">
           {featuredListings.map((post) => (
