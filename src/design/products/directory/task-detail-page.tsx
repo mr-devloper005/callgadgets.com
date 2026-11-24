@@ -35,13 +35,6 @@ export function DirectoryTaskDetailPage({
   const phone = typeof content.phone === 'string' ? content.phone : ''
   const email = typeof content.email === 'string' ? content.email : ''
   const highlights = Array.isArray(content.highlights) ? content.highlights.filter((item): item is string => typeof item === 'string') : []
-  const postedAt = post.publishedAt
-    ? new Date(post.publishedAt).toLocaleDateString('en-IN', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-      })
-    : ''
 
   const discoverMore = [
     category || taskLabel,
@@ -75,7 +68,6 @@ export function DirectoryTaskDetailPage({
             <div className="border-b border-[#d9dde6] px-5 py-4">
               <p className="text-3xl font-semibold leading-tight">{post.title}</p>
               <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[#4b5565]">
-                {postedAt ? <span>Posted: {postedAt}</span> : null}
                 {post.authorName ? <span>Posted By: {post.authorName}</span> : null}
                 <span>Ad Type: {taskLabel}</span>
               </div>
